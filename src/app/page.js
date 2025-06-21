@@ -1,6 +1,5 @@
 import Image from "next/image";
-import Link from "next/link"; 
-
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -27,13 +26,19 @@ export default function Home() {
           </li>
         </ol>
 
-
         <div className="flex flex-wrap justify-center gap-4">
-          {["Piano", "Guitar", "Cello", "Violin", "Viola", "Flute", "Trumpet", "Trombone"].map((instrument) => (
+          {[
+            "Piano",
+            "Guitar",
+            "Cello",
+            "Violin",
+            "Viola",
+            "Flute",
+            "Trumpet",
+            "Trombone",
+          ].map((instrument) => (
             <Link href={`/${instrument.toLowerCase()}`} key={instrument}>
-              <button
-                className="rounded-full border border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-6"
-              >
+              <button className="rounded-full border border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-6">
                 {instrument}
               </button>
             </Link>
