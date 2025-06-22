@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useRef } from "react";
 import { Button } from "@/_components/ui/button";
 import { Card } from "@/_components/ui/card";
@@ -24,6 +25,7 @@ export default function PianoRecordingPage() {
   const [base64AudioFile, setBase64AudioFile] = useState(null);
   const [songTitle, setSongTitle] = useState("");
   const [analysis, setAnalysis] = useState("");
+  const [analysisDone, setAnalysisDone] = useState(false);
   const fileInputRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioRef = useRef(null);
@@ -249,7 +251,10 @@ export default function PianoRecordingPage() {
                     "piano",
                     songTitle,
                     base64AudioFile.split(",")[1]
-                  );
+                  ).then((res) => {
+                    setAnalysisDone(true);
+                    return res;
+                  });
                   setAnalysis(result);
                 }}
               >
@@ -263,9 +268,21 @@ export default function PianoRecordingPage() {
               >
                 Save Recording
               </Button>
-              { analysis }
             </div>
           )}
+
+          {analysisDone && (
+            <Link
+              href={{
+                pathname: "/analysis",
+                query: { data: analysis },
+              }}
+            >
+              See Analysis
+            </Link>
+          )}
+
+          {/* Song Title Input */}
 
           {/* Hidden File Input */}
           <input
@@ -321,4 +338,3 @@ export default function PianoRecordingPage() {
     </div>
   );
 }
-
