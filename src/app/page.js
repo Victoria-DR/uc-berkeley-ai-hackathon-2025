@@ -234,12 +234,13 @@ export default function MusicTutorLanding() {
             </span>
           </div>
 
-          <Button
-            className={`bg-gradient-to-r ${currentThemeData.gradient} hover:scale-110 text-white px-8 py-3 rounded-2xl font-semibold shadow-xl ${currentThemeData.shadow} hover:shadow-2xl transition-all duration-300 border border-white/20`}
-            onClick={() => alert("Get Started clicked!")}
-          >
-            Get Started
-          </Button>
+          <Link href="/instruments">
+            <Button
+              className={`bg-gradient-to-r ${currentThemeData.gradient} hover:scale-110 text-white px-8 py-3 rounded-2xl font-semibold shadow-xl ${currentThemeData.shadow} hover:shadow-2xl transition-all duration-300 border border-white/20`}
+            >
+              Get Started
+            </Button>
+          </Link>
         </nav>
       </header>
 
