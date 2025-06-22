@@ -5,9 +5,8 @@ export default function Chat() {
     <iframe
       src="https://live-audio-for-uc-berkeley-ai-hacka.vercel.app"
       allow="microphone"
-      width="90%"
-      height="750px"
-      style={{ marginLeft: "5%" }}
+      width="100%"
+      height="900px"
     ></iframe>
   );
 }
