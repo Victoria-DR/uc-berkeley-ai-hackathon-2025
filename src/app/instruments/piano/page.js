@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/_components/ui/button";
 import { Card } from "@/_components/ui/card";
 import {
@@ -17,15 +17,18 @@ import {
 import { cn } from "@/_components/lib/utils";
 import { analyzeAudio } from "@/_lib/gemini/analyze";
 
+
+
 export default function PianoRecordingPage() {
   const [isRecording, setIsRecording] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [recordedAudio, setRecordedAudio] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
   const [base64AudioFile, setBase64AudioFile] = useState(null);
-  const [songTitle, setSongTitle] = useState("");
-  const [analysis, setAnalysis] = useState("");
-  const [analysisDone, setAnalysisDone] = useState(false);
+  const [songTitle, setSongTitle] = useState(""); // change back later vv
+  const [analysis, setAnalysis] = useState(`This is a performance of Chopin's Minute Waltz (Waltz in D-flat major, Op. 64, No. 1). Here's an analysis of your playing: ### Strengths: * **Consistent Rhythmic Drive:** You maintain a good underlying pulse throughout the piece, giving it a solid rhythmic foundation, particularly evident in the faster passages (e.g., **0:08-0:14** and **0:53-0:58**). * **Good Finger Dexterity and Clarity:** Your notes are generally well-articulated and clear, even in rapid runs, which prevents the sound from becoming muddy (e.g., **0:22-0:25** and **0:38-0:41**). * **Emerging Musicality:** There's an evident attempt to shape phrases and connect musical ideas, showing potential for more expressive interpretation. The transition around **1:00-1:05** shows a thoughtful approach to the changing character. ### Areas for Improvement: * **Limited Dynamic Range:** The performance largely remains at a mezzo-forte to forte level. Exploring a wider range of dynamics (from soft *piano* to loud *fortissimo*) would add significant emotional depth and contrast, especially at the opening (**0:08**) and in repeated sections (**0:53-0:58**). * **Lack of Consistent Legato and Lyrical Phrasing:** While articulation is good, the melodic lines sometimes feel less connected or "singing." Focus on creating smoother, longer legato phrases, particularly in the lyrical sections (e.g., **0:15-0:20**) and ensuring a more fluid transition between sections (e.g., **0:25-0:28**). * **Occasional Tempo Instability and Rhythmic Stiffness:** While the overall tempo is good, there are moments where it slightly rushes (e.g., **0:20-0:21** and **0:37-0:38**). Work on maintaining a more relaxed and consistent tempo, allowing the waltz character to breathe and flow naturally rather than feeling rushed. ### Resources for an Ideal Performance: To hear what an ideal performance of Chopin's Minute Waltz sounds like, focusing on nuanced dynamics, fluid phrasing, and a graceful waltz tempo, I recommend listening to recordings by: * **Arthur Rubinstein:** Known for his elegant and refined Chopin interpretations. Listen to his performance for the subtle dynamic shifts and beautiful legato phrasing. * [Arthur Rubinstein - Chopin: Waltz in D-flat major, Op. 64 No. 1 "Minute"](https://www.youtube.com/watch?v=F3S0w2tq04E) (Pay close attention to the dynamic swells and decays from **0:00-0:15** and the singing quality of the melody at **0:20-0:30**). * **Martha Argerich:** Offers a more fiery and virtuosic, yet still deeply musical, interpretation, showcasing impressive dynamic contrast and rhythmic vitality. * [Martha Argerich - Chopin: Waltz in D-flat major, Op. 64 No. 1 "Minute"](https://www.youtube.com/watch?v=gT-x00WJ0dM) (Notice her dynamic control throughout, especially the clear but not overly loud opening, and the incredible energy and rhythmic precision from **0:40 onwards**).`);
+  const [analysisDone, setAnalysisDone] = useState(false); //change back later
+  const [showModal, setShowModal] = useState(false); 
   const fileInputRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioRef = useRef(null);
@@ -101,6 +104,12 @@ export default function PianoRecordingPage() {
       audioRef.current.currentTime = 0;
     }
   };
+
+  useEffect(() => {
+    if (analysisDone) {
+      setShowModal(true);
+    }
+  }, [analysisDone]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 relative overflow-hidden">
@@ -271,17 +280,6 @@ export default function PianoRecordingPage() {
             </div>
           )}
 
-          {analysisDone && (
-            <Link
-              href={{
-                pathname: "/analysis",
-                query: { data: analysis },
-              }}
-            >
-              See Analysis
-            </Link>
-          )}
-
           {/* Song Title Input */}
 
           {/* Hidden File Input */}
@@ -293,6 +291,28 @@ export default function PianoRecordingPage() {
             className="hidden"
           />
         </div>
+
+        {showModal && (
+          <div className="fixed inset-0 z-50 bg-gray-100 bg-opacity-30 flex items-center justify-center">
+            <div className="bg-white rounded-2xl p-6 shadow-xl w-full max-w-sm text-center space-y-4">
+              <h2 className="text-xl font-bold text-gray-800">Analysis Complete</h2>
+              <p className="text-gray-600">Your performance has been analyzed.</p>
+              <Link
+                href={{
+                  pathname: "/analysis",
+                  query: { data: analysis },
+                }}
+                className="inline-block w-full"
+              >
+                <Button
+                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700"
+                >
+                  See Analysis
+                </Button>
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
 
       <style jsx>{`
