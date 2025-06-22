@@ -1,25 +1,16 @@
 // app/instruments/page.jsx
 "use client"
 
-import { useState } from "react"
+import Link from "next/link"
 import { Card, CardContent } from "_components/ui/card"
 import { Button } from "_components/ui/button"
-import {
-  Piano,
-  Guitar,
-  Cello,
-  Violin,
-  Viola,
-  Flute,
-  Trumpet,
-  Trombone,
-} from "lucide-react"
+import { Music } from "lucide-react"
 
 const instruments = [
   {
     id: "piano",
     name: "Piano",
-    icon: Piano,
+    icon: "🎹",
     description: "Classic keyboard instrument",
     color: "bg-blue-500",
     hoverColor: "hover:bg-blue-600",
@@ -27,7 +18,7 @@ const instruments = [
   {
     id: "guitar",
     name: "Guitar",
-    icon: Guitar,
+    icon: "🎸",
     description: "String instrument favorite",
     color: "bg-green-500",
     hoverColor: "hover:bg-green-600",
@@ -35,7 +26,7 @@ const instruments = [
   {
     id: "cello",
     name: "Cello",
-    icon: Cello,
+    icon: "🎼",
     description: "Deep string resonance",
     color: "bg-pink-500",
     hoverColor: "hover:bg-pink-600",
@@ -43,7 +34,7 @@ const instruments = [
   {
     id: "violin",
     name: "Violin",
-    icon: Violin,
+    icon: "🎻",
     description: "Elegant string instrument",
     color: "bg-purple-500",
     hoverColor: "hover:bg-purple-600",
@@ -51,7 +42,7 @@ const instruments = [
   {
     id: "viola",
     name: "Viola",
-    icon: Viola,
+    icon: "🎶",
     description: "Rich alto voice",
     color: "bg-indigo-500",
     hoverColor: "hover:bg-indigo-600",
@@ -59,7 +50,7 @@ const instruments = [
   {
     id: "flute",
     name: "Flute",
-    icon: Flute,
+    icon: "🎵",
     description: "Woodwind beauty",
     color: "bg-yellow-500",
     hoverColor: "hover:bg-yellow-600",
@@ -67,7 +58,7 @@ const instruments = [
   {
     id: "trumpet",
     name: "Trumpet",
-    icon: Trumpet,
+    icon: "🎺",
     description: "Brass section leader",
     color: "bg-orange-500",
     hoverColor: "hover:bg-orange-600",
@@ -75,7 +66,7 @@ const instruments = [
   {
     id: "trombone",
     name: "Trombone",
-    icon: Trombone,
+    icon: "🎺",
     description: "Slide-driven brass",
     color: "bg-red-500",
     hoverColor: "hover:bg-red-600",
@@ -83,17 +74,6 @@ const instruments = [
 ]
 
 export default function InstrumentsPage() {
-  const [selected, setSelected] = useState(null)
-
-  const handleClick = (name) => {
-    setSelected(name)
-    alert(`Opening ${name}…`)
-    // to navigate instead, use:
-    // import { useRouter } from "next/navigation"
-    // const router = useRouter()
-    // router.push(`/instruments/${name.toLowerCase()}`)
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       <div className="container mx-auto px-4 py-12">
@@ -115,7 +95,6 @@ export default function InstrumentsPage() {
         {/* Instruments Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {instruments.map((ins) => {
-            const Icon = ins.icon
             return (
               <Card
                 key={ins.id}
@@ -125,19 +104,20 @@ export default function InstrumentsPage() {
                   <div
                     className={`w-16 h-16 mx-auto mb-4 rounded-full ${ins.color} ${ins.hoverColor} flex items-center justify-center transition-colors duration-300 group-hover:scale-110`}
                   >
-                    <Icon className="w-8 h-8 text-white" />
+                    <div className="text-3xl">{ins.icon}</div>
                   </div>
                   <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-blue-300 transition-colors">
                     {ins.name}
                   </h3>
                   <p className="text-slate-400 text-sm mb-4">{ins.description}</p>
-                  <Button
-                    size="sm"
-                    className={`w-full ${ins.color} ${ins.hoverColor} text-white border-0 transition-all duration-300 group-hover:shadow-lg`}
-                    onClick={() => handleClick(ins.name)}
-                  >
-                    Play {ins.name}
-                  </Button>
+                  <Link href={`/instruments/${ins.id}`}>
+                    <Button
+                      size="sm"
+                      className={`w-full ${ins.color} ${ins.hoverColor} text-white border-0 transition-all duration-300 group-hover:shadow-lg`}
+                    >
+                      Play {ins.name}
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
             )
