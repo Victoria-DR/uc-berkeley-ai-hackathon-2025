@@ -3,6 +3,7 @@
 import { useState, useRef } from "react"
 import { Button } from "_components/ui/button"
 import { Card } from "_components/ui/card"
+import ReactMarkdown from 'react-markdown';
 import {
   Mic,
   Upload,
@@ -404,6 +405,45 @@ export default function PianoRecordingPage() {
       {/* Analysis Results Modal */}
       {showAnalysisModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <Card className="w-full max-w-4xl max-h-[80vh] bg-white shadow-2xl overflow-hidden"> {/* Changed max-w-2xl to max-w-4xl for wider modal */}
+            <div className="p-6 border-b border-gray-200 flex justify-between items-center">
+              <h3 className="text-xl font-semibold text-gray-900">Performance Analysis</h3>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowAnalysisModal(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X className="w-5 h-5" />
+              </Button>
+            </div>
+            <div className="p-6 overflow-y-auto max-h-[60vh]">
+              {/*
+                Apply the styling to the parent div or use the 'prose' class
+                for default markdown styling. The `whitespace-pre-wrap` and
+                text color/leading will apply to the content rendered within this div.
+              */}
+              <div className="prose prose-sm max-w-none whitespace-pre-wrap text-gray-700 leading-relaxed">
+                <ReactMarkdown>
+                  {analysisResult}
+                </ReactMarkdown>
+              </div>
+            </div>
+            <div className="p-6 border-t border-gray-200 flex justify-end">
+              <Button
+                onClick={() => setShowAnalysisModal(false)}
+                className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600"
+              >
+                Close
+              </Button>
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* Analysis Results Modal
+      {showAnalysisModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <Card className="w-full max-w-2xl max-h-[80vh] bg-white shadow-2xl overflow-hidden">
             <div className="p-6 border-b border-gray-200 flex justify-between items-center">
               <h3 className="text-xl font-semibold text-gray-900">Performance Analysis</h3>
@@ -431,7 +471,7 @@ export default function PianoRecordingPage() {
             </div>
           </Card>
         </div>
-      )}
+      )} */}
 
       <style jsx>{`
         @keyframes blob {
