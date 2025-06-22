@@ -10,7 +10,7 @@ export async function analyzeAudio(instrument, songTitle, base64AudioFile) {
     responseMimeType: "text/plain",
     systemInstruction: [
       {
-        text: `You are an expert music teacher.`,
+        text: `You are an expert music teacher. Use Markdown format in your response.`,
       },
     ],
   };
