@@ -1,85 +1,94 @@
-"use client"
+"use client";
 
-import { useState, useRef } from "react"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { Mic, Upload, Square, Play, Pause, Trash2, Music, Sparkles } from "lucide-react"
-import { cn } from "../../lib/utils";
+import { useState, useRef } from "react";
+import { Button } from "@/_components/ui/button";
+import { Card } from "@/_components/ui/card";
+import {
+  Mic,
+  Upload,
+  Square,
+  Play,
+  Pause,
+  Trash2,
+  Music,
+  Sparkles,
+} from "lucide-react";
+import { cn } from "@/_components/lib/utils";
 
 export default function PianoRecordingPage() {
-  const [isRecording, setIsRecording] = useState(false)
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [recordedAudio, setRecordedAudio] = useState(null)
-  const [uploadedFile, setUploadedFile] = useState(null)
-  const fileInputRef = useRef(null)
-  const mediaRecorderRef = useRef(null)
-  const audioRef = useRef(null)
+  const [isRecording, setIsRecording] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [recordedAudio, setRecordedAudio] = useState(null);
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const fileInputRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+  const audioRef = useRef(null);
 
   const startRecording = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-      const mediaRecorder = new MediaRecorder(stream)
-      mediaRecorderRef.current = mediaRecorder
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
 
-      const chunks = []
+      const chunks = [];
       mediaRecorder.ondataavailable = (event) => {
-        chunks.push(event.data)
-      }
+        chunks.push(event.data);
+      };
 
       mediaRecorder.onstop = () => {
-        const blob = new Blob(chunks, { type: "audio/wav" })
-        const audioUrl = URL.createObjectURL(blob)
-        setRecordedAudio(audioUrl)
-        stream.getTracks().forEach((track) => track.stop())
-      }
+        const blob = new Blob(chunks, { type: "audio/wav" });
+        const audioUrl = URL.createObjectURL(blob);
+        setRecordedAudio(audioUrl);
+        stream.getTracks().forEach((track) => track.stop());
+      };
 
-      mediaRecorder.start()
-      setIsRecording(true)
+      mediaRecorder.start();
+      setIsRecording(true);
     } catch (error) {
-      console.error("Error accessing microphone:", error)
+      console.error("Error accessing microphone:", error);
     }
-  }
+  };
 
   const stopRecording = () => {
     if (mediaRecorderRef.current && isRecording) {
-      mediaRecorderRef.current.stop()
-      setIsRecording(false)
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
     }
-  }
+  };
 
   const handleFileUpload = (event) => {
-    const file = event.target.files?.[0]
+    const file = event.target.files?.[0];
     if (file && file.type.startsWith("audio/")) {
-      setUploadedFile(file)
-      const audioUrl = URL.createObjectURL(file)
-      setRecordedAudio(audioUrl)
+      setUploadedFile(file);
+      const audioUrl = URL.createObjectURL(file);
+      setRecordedAudio(audioUrl);
     }
-  }
+  };
 
   const togglePlayback = () => {
     if (audioRef.current) {
       if (isPlaying) {
-        audioRef.current.pause()
+        audioRef.current.pause();
       } else {
-        audioRef.current.play()
+        audioRef.current.play();
       }
-      setIsPlaying(!isPlaying)
+      setIsPlaying(!isPlaying);
     }
-  }
+  };
 
   const handleAudioEnded = () => {
-    setIsPlaying(false)
-  }
+    setIsPlaying(false);
+  };
 
   const clearRecording = () => {
-    setRecordedAudio(null)
-    setUploadedFile(null)
-    setIsPlaying(false)
+    setRecordedAudio(null);
+    setUploadedFile(null);
+    setIsPlaying(false);
     if (audioRef.current) {
-      audioRef.current.pause()
-      audioRef.current.currentTime = 0
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 relative overflow-hidden">
@@ -108,7 +117,9 @@ export default function PianoRecordingPage() {
             <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
               Piano Practice
             </h1>
-            <p className="text-gray-600 text-lg">Record your performance or upload an audio file</p>
+            <p className="text-gray-600 text-lg">
+              Record your performance or upload an audio file
+            </p>
           </div>
 
           {/* Recording Status */}
@@ -119,7 +130,9 @@ export default function PianoRecordingPage() {
                   <div className="w-4 h-4 bg-red-500 rounded-full animate-ping absolute"></div>
                   <div className="w-4 h-4 bg-red-500 rounded-full"></div>
                 </div>
-                <span className="text-red-700 font-semibold text-lg">Recording in progress...</span>
+                <span className="text-red-700 font-semibold text-lg">
+                  Recording in progress...
+                </span>
               </div>
             </Card>
           )}
@@ -133,7 +146,9 @@ export default function PianoRecordingPage() {
                     <Music className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900">{uploadedFile ? uploadedFile.name : "Your Recording"}</p>
+                    <p className="font-medium text-gray-900">
+                      {uploadedFile ? uploadedFile.name : "Your Recording"}
+                    </p>
                     <p className="text-sm text-gray-500">Ready to analyze</p>
                   </div>
                 </div>
@@ -144,7 +159,11 @@ export default function PianoRecordingPage() {
                     onClick={togglePlayback}
                     className="bg-white/50 hover:bg-white border-gray-200 shadow-sm"
                   >
-                    {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                    {isPlaying ? (
+                      <Pause className="w-4 h-4" />
+                    ) : (
+                      <Play className="w-4 h-4" />
+                    )}
                   </Button>
                   <Button
                     variant="outline"
@@ -156,7 +175,12 @@ export default function PianoRecordingPage() {
                   </Button>
                 </div>
               </div>
-              <audio ref={audioRef} src={recordedAudio} onEnded={handleAudioEnded} className="hidden" />
+              <audio
+                ref={audioRef}
+                src={recordedAudio}
+                onEnded={handleAudioEnded}
+                className="hidden"
+              />
             </Card>
           )}
 
@@ -169,7 +193,7 @@ export default function PianoRecordingPage() {
                 size="lg"
                 className={cn(
                   "rounded-full w-20 h-20 hover:bg-gray-100 transition-all duration-300 transform hover:scale-105",
-                  isRecording && "bg-red-100 hover:bg-red-200 animate-pulse",
+                  isRecording && "bg-red-100 hover:bg-red-200 animate-pulse"
                 )}
                 onClick={isRecording ? stopRecording : startRecording}
               >
@@ -197,8 +221,12 @@ export default function PianoRecordingPage() {
 
           {/* Instructions */}
           <div className="text-center space-y-3">
-            <p className="text-gray-600 font-medium">Tap the microphone to start recording</p>
-            <p className="text-gray-500">Or tap the upload icon to select an audio file</p>
+            <p className="text-gray-600 font-medium">
+              Tap the microphone to start recording
+            </p>
+            <p className="text-gray-500">
+              Or tap the upload icon to select an audio file
+            </p>
           </div>
 
           {/* Action Buttons */}
@@ -219,7 +247,13 @@ export default function PianoRecordingPage() {
           )}
 
           {/* Hidden File Input */}
-          <input ref={fileInputRef} type="file" accept="audio/*" onChange={handleFileUpload} className="hidden" />
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="audio/*"
+            onChange={handleFileUpload}
+            className="hidden"
+          />
         </div>
       </div>
 
@@ -239,7 +273,8 @@ export default function PianoRecordingPage() {
           }
         }
         @keyframes float {
-          0%, 100% {
+          0%,
+          100% {
             transform: translateY(0px);
           }
           50% {
@@ -263,5 +298,6 @@ export default function PianoRecordingPage() {
         }
       `}</style>
     </div>
-  )
+  );
 }
+
