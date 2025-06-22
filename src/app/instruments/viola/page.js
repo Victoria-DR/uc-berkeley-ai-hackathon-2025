@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { useState, useRef } from "react"
 import { Button } from "_components/ui/button"
 import { Card } from "_components/ui/card"
@@ -117,12 +118,6 @@ export default function ViolaRecordingPage() {
     }
   }
 
-  const handleBackToHome = () => {
-    // Navigate back to home page - you can replace this with your routing logic
-    window.history.back()
-    // Or if using Next.js router: router.push('/')
-  }
-
   const handleChatSubmit = (e) => {
     e.preventDefault()
     if (musicType.trim()) {
@@ -161,15 +156,16 @@ export default function ViolaRecordingPage() {
       {/* Header with navigation */}
       <div className="absolute top-0 left-0 right-0 z-20 p-4">
         <div className="flex justify-between items-center">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleBackToHome}
-            className="bg-white/80 backdrop-blur-sm hover:bg-white shadow-md border border-white/20"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Home
-          </Button>
+          <Link href="/">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="bg-white/80 backdrop-blur-sm hover:bg-white shadow-md border border-white/20"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Home
+            </Button>
+          </Link>
         </div>
       </div>
       {/* Background decorative elements */}

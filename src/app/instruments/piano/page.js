@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { useState, useRef } from "react"
 import { Button } from "_components/ui/button"
 import { Card } from "_components/ui/card"
@@ -148,15 +149,16 @@ export default function PianoRecordingPage() {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 relative overflow-hidden">
       {/* Back Button */}
       <div className="absolute top-6 left-6 z-20">
-        <Button
-          variant="outline"
-          size="sm"
-          className="bg-white/80 backdrop-blur-sm border-gray-200 hover:bg-white shadow-md"
-          onClick={() => window.history.back()}
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Home
-        </Button>
+        <Link href="/">
+          <Button
+            variant="outline"
+            size="sm"
+            className="bg-white/80 backdrop-blur-sm border-gray-200 hover:bg-white shadow-md"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Home
+          </Button>
+        </Link>
       </div>
 
       {/* Enhanced Background */}
