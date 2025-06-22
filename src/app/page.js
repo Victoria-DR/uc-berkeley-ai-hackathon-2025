@@ -1,15 +1,15 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { useState, useEffect } from "react";
-import { Button } from "_components/ui/button";
-import { Music, Play, Sparkles, MessageCircle, X, Star } from "lucide-react";
+import Link from "next/link"
+import { useState, useEffect } from "react"
+import { Button } from "@/components/ui/button"
+import { Music, Play, Sparkles, MessageCircle, Star } from "lucide-react"
 
 export default function MusicTutorLanding() {
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const [currentTheme, setCurrentTheme] = useState(0);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isChatOpen, setIsChatOpen] = useState(false)
+  const [currentTheme, setCurrentTheme] = useState(0)
+  const [isDarkMode, setIsDarkMode] = useState(false)
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
 
   const themes = [
     {
@@ -36,27 +36,27 @@ export default function MusicTutorLanding() {
       shadow: "shadow-red-400/50",
       glow: "shadow-red-500/30",
     },
-  ];
+  ]
 
   // Track mouse movement for cursor light effect
   useEffect(() => {
     const handleMouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
+      setMousePosition({ x: e.clientX, y: e.clientY })
+    }
 
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+    window.addEventListener("mousemove", handleMouseMove)
+    return () => window.removeEventListener("mousemove", handleMouseMove)
+  }, [])
 
   const handleThemeChange = () => {
-    setCurrentTheme((prev) => (prev + 1) % themes.length);
-  };
+    setCurrentTheme((prev) => (prev + 1) % themes.length)
+  }
 
   const handleModeToggle = () => {
-    setIsDarkMode(!isDarkMode);
-  };
+    setIsDarkMode(!isDarkMode)
+  }
 
-  const currentThemeData = themes[currentTheme];
+  const currentThemeData = themes[currentTheme]
 
   return (
     <div
@@ -111,9 +111,7 @@ export default function MusicTutorLanding() {
         <div className="absolute bottom-24 left-1/3 text-purple-400 opacity-40 text-2xl animate-pulse drop-shadow-lg">
           ♫
         </div>
-        <div className="absolute top-2/3 right-20 text-blue-400 opacity-60 text-lg animate-ping drop-shadow-lg">
-          ♬
-        </div>
+        <div className="absolute top-2/3 right-20 text-blue-400 opacity-60 text-lg animate-ping drop-shadow-lg">♬</div>
         <div className="absolute top-1/3 left-1/4 text-pink-400 opacity-45 text-lg animate-bounce drop-shadow-lg">
           ♩
         </div>
@@ -130,9 +128,7 @@ export default function MusicTutorLanding() {
         >
           <div className="text-center">
             <div
-              className={`text-sm font-bold mb-3 tracking-wider ${
-                isDarkMode ? "text-pink-300" : "text-purple-600"
-              }`}
+              className={`text-sm font-bold mb-3 tracking-wider ${isDarkMode ? "text-pink-300" : "text-purple-600"}`}
             >
               THEME
             </div>
@@ -146,16 +142,12 @@ export default function MusicTutorLanding() {
                 ></div>
               </div>
             </button>
-            <div className="text-xs mt-2 font-medium opacity-70">
-              {currentThemeData.name}
-            </div>
+            <div className="text-xs mt-2 font-medium opacity-70">{currentThemeData.name}</div>
           </div>
 
           <div className="flex flex-col items-center space-y-6">
             <Sparkles
-              className={`w-7 h-7 ${
-                isDarkMode ? "text-purple-300" : "text-purple-500"
-              } drop-shadow-lg animate-pulse`}
+              className={`w-7 h-7 ${isDarkMode ? "text-purple-300" : "text-purple-500"} drop-shadow-lg animate-pulse`}
             />
             <button
               onClick={handleModeToggle}
@@ -165,20 +157,12 @@ export default function MusicTutorLanding() {
                   : "bg-gradient-to-br from-purple-100 to-purple-200 shadow-purple-300/30"
               }`}
             >
-              <div
-                className={`w-4 h-4 rounded ${
-                  isDarkMode ? "bg-purple-300" : "bg-purple-500"
-                } animate-pulse`}
-              ></div>
+              <div className={`w-4 h-4 rounded ${isDarkMode ? "bg-purple-300" : "bg-purple-500"} animate-pulse`}></div>
             </button>
           </div>
 
           <div className="text-center">
-            <div
-              className={`text-sm font-bold tracking-wider ${
-                isDarkMode ? "text-purple-300" : "text-purple-600"
-              }`}
-            >
+            <div className={`text-sm font-bold tracking-wider ${isDarkMode ? "text-purple-300" : "text-purple-600"}`}>
               MODE
             </div>
           </div>
@@ -194,11 +178,7 @@ export default function MusicTutorLanding() {
             >
               <Music className="w-7 h-7 text-white drop-shadow-lg" />
             </div>
-            <span
-              className={`text-3xl font-bold ${
-                isDarkMode ? "text-white" : "text-gray-800"
-              } drop-shadow-lg`}
-            >
+            <span className={`text-3xl font-bold ${isDarkMode ? "text-white" : "text-gray-800"} drop-shadow-lg`}>
               Crescendo
             </span>
           </div>
@@ -220,20 +200,22 @@ export default function MusicTutorLanding() {
             </span>
             <Link href="/instruments">
               <span
-                className={`cursor-default hover:scale-105 transition-transform duration-200 ${
+                className={`cursor-pointer hover:scale-105 transition-transform duration-200 ${
                   isDarkMode ? "text-gray-300" : "text-gray-600"
                 } drop-shadow-sm`}
               >
                 Instruments
               </span>
             </Link>
-            <span
-              className={`cursor-default hover:scale-105 transition-transform duration-200 ${
-                isDarkMode ? "text-gray-300" : "text-gray-600"
-              } drop-shadow-sm`}
-            >
-              About
-            </span>
+            <Link href="/instruments/about">
+              <span
+                className={`cursor-pointer hover:scale-105 transition-transform duration-200 ${
+                  isDarkMode ? "text-gray-300" : "text-gray-600"
+                } drop-shadow-sm`}
+              >
+                About
+              </span>
+            </Link>
           </div>
 
           <Link href="/instruments">
@@ -259,9 +241,7 @@ export default function MusicTutorLanding() {
           >
             <Sparkles className="w-6 h-6 text-pink-500 animate-spin drop-shadow-lg" />
             <span
-              className={`font-semibold text-lg ${
-                isDarkMode ? "text-pink-300" : "text-purple-600"
-              } drop-shadow-sm`}
+              className={`font-semibold text-lg ${isDarkMode ? "text-pink-300" : "text-purple-600"} drop-shadow-sm`}
             >
               AI-Powered Music Learning
             </span>
@@ -272,9 +252,7 @@ export default function MusicTutorLanding() {
           <h1 className="text-6xl md:text-7xl lg:text-9xl font-bold mb-10 leading-tight">
             <span
               className={`bg-gradient-to-r bg-clip-text text-transparent drop-shadow-2xl ${
-                isDarkMode
-                  ? "from-pink-300 via-purple-300 to-blue-300"
-                  : "from-pink-500 via-purple-600 to-blue-600"
+                isDarkMode ? "from-pink-300 via-purple-300 to-blue-300" : "from-pink-500 via-purple-600 to-blue-600"
               }`}
               style={{
                 filter: "drop-shadow(0 0 20px rgba(147, 51, 234, 0.3))",
@@ -343,11 +321,7 @@ export default function MusicTutorLanding() {
               >
                 AI Analysis
               </h3>
-              <p
-                className={`text-lg ${
-                  isDarkMode ? "text-gray-300" : "text-gray-600"
-                } drop-shadow-sm`}
-              >
+              <p className={`text-lg ${isDarkMode ? "text-gray-300" : "text-gray-600"} drop-shadow-sm`}>
                 Get instant feedback on your performance
               </p>
             </div>
@@ -369,11 +343,7 @@ export default function MusicTutorLanding() {
               >
                 Interactive Lessons
               </h3>
-              <p
-                className={`text-lg ${
-                  isDarkMode ? "text-gray-300" : "text-gray-600"
-                } drop-shadow-sm`}
-              >
+              <p className={`text-lg ${isDarkMode ? "text-gray-300" : "text-gray-600"} drop-shadow-sm`}>
                 Learn with engaging, step-by-step lessons
               </p>
             </div>
@@ -395,11 +365,7 @@ export default function MusicTutorLanding() {
               >
                 Progress Tracking
               </h3>
-              <p
-                className={`text-lg ${
-                  isDarkMode ? "text-gray-300" : "text-gray-600"
-                } drop-shadow-sm`}
-              >
+              <p className={`text-lg ${isDarkMode ? "text-gray-300" : "text-gray-600"} drop-shadow-sm`}>
                 Monitor your improvement with detailed analytics
               </p>
             </div>
@@ -410,75 +376,11 @@ export default function MusicTutorLanding() {
       {/* Enhanced Chatbox */}
       <div className="fixed bottom-8 right-8 z-50">
         <Link href="/chat">
-          <Button
-            className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-full shadow-2xl shadow-purple-500/50 flex items-center justify-center hover:scale-125 transition-all duration-300 border-2 border-white/20 animate-pulse"
-          >
+          <Button className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-full shadow-2xl shadow-purple-500/50 flex items-center justify-center hover:scale-125 transition-all duration-300 border-2 border-white/20 animate-pulse">
             <MessageCircle className="w-7 h-7 drop-shadow-lg" />
           </Button>
         </Link>
-        {/* {!isChatOpen ? (
-          <Button
-            onClick={() => setIsChatOpen(true)}
-            className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-full shadow-2xl shadow-purple-500/50 flex items-center justify-center hover:scale-125 transition-all duration-300 border-2 border-white/20 animate-pulse"
-          >
-            <MessageCircle className="w-7 h-7 drop-shadow-lg" />
-          </Button>
-        ) : (
-          <div
-            className={`rounded-3xl shadow-2xl w-80 h-96 border-2 backdrop-blur-xl transition-all duration-500 ${
-              isDarkMode ? "bg-gray-800/95 border-gray-600/30 shadow-gray-500/30" : "bg-white/95 border-white/40 shadow-white/40"
-            }`}
-          >
-            <div className={`flex items-center justify-between p-6 border-b-2 ${isDarkMode ? "border-gray-700/50" : "border-gray-200/50"}`}>
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg shadow-purple-500/30">
-                  <MessageCircle className="w-5 h-5 text-white drop-shadow-lg" />
-                </div>
-                <span className={`font-semibold ${isDarkMode ? "text-white" : "text-gray-800"} drop-shadow-sm`}>Chat Support</span>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsChatOpen(false)}
-                className={`rounded-full hover:scale-110 transition-all duration-200 ${isDarkMode ? "text-gray-400 hover:text-gray-200 hover:bg-gray-700" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`}
-              >
-                <X className="w-5 h-5" />
-              </Button>
-            </div>
-
-            <div className="p-6 h-64 overflow-y-auto">
-              <div className={`rounded-2xl p-4 mb-4 shadow-lg ${
-                isDarkMode ? "bg-gray-700/80" : "bg-gray-100/80"
-              }`}>
-                <p className={`text-sm ${isDarkMode ? "text-gray-200" : "text-gray-700"} drop-shadow-sm`}>
-                  Hello! How can I help you with your music learning journey today? 🎵
-                </p>
-              </div>
-            </div>
-
-            <div className={`p-6 border-t-2 ${isDarkMode ? "border-gray-700/50" : "border-gray-200/50"}`}>
-              <div className="flex space-x-3">
-                <input
-                  type="text"
-                  placeholder="Type your message..."
-                  className={`flex-1 px-4 py-3 border-2 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300 ${
-                    isDarkMode
-                      ? "border-gray-600/50 bg-gray-700/80 text-white placeholder-gray-400"
-                      : "border-gray-300/50 bg-white/80 text-gray-900 placeholder-gray-500"
-                  }`}
-                />
-                <Button
-                  size="sm"
-                  className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-2xl px-4 shadow-lg hover:scale-105 transition-all duration-200"
-                >
-                  Send
-                </Button>
-              </div>
-            </div>
-          </div>
-        )} */}
       </div>
     </div>
-  );
+  )
 }
-
