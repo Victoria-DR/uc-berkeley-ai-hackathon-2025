@@ -14,7 +14,7 @@ import {
   Music,
   Sparkles,
 } from "lucide-react";
-import { cn } from "@/_components/lib/utils";
+import { cn } from "@/_lib/utils";
 import { analyzeAudio } from "@/_lib/gemini/analyze";
 
 export default function PianoRecordingPage() {
