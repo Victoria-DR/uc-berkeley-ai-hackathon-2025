@@ -1,7 +1,6 @@
-import "dotenv/config";
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_API_KEY });
+const ai = new GoogleGenAI({ apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY });
 
 export async function analyzeAudio(base64AudioFile) {
   const response = await ai.models.generateContent({
