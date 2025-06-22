@@ -307,18 +307,19 @@ export default function MusicTutorLanding() {
               </Button>
             </Link>
 
-            <Button
-              variant="outline"
-              className={`backdrop-blur-xl px-10 py-5 rounded-3xl font-semibold text-xl flex items-center space-x-3 hover:scale-110 transition-all duration-300 shadow-xl border-2 ${
-                isDarkMode
-                  ? "bg-gray-800/90 border-purple-400/50 text-purple-300 hover:bg-gray-700/90 shadow-purple-500/30"
-                  : "bg-white/90 border-purple-300/50 text-purple-600 hover:bg-purple-50/90 shadow-purple-300/30"
-              }`}
-              onClick={() => alert("Watch Demo clicked!")}
-            >
-              <Play className="w-6 h-6 drop-shadow-lg" />
-              <span>Watch Demo</span>
-            </Button>
+            <Link href="https://youtu.be/uQhK8rDhVSw" target="_blank">
+              <Button
+                variant="outline"
+                className={`backdrop-blur-xl px-10 py-5 rounded-3xl font-semibold text-xl flex items-center space-x-3 hover:scale-110 transition-all duration-300 shadow-xl border-2 ${
+                  isDarkMode
+                    ? "bg-gray-800/90 border-purple-400/50 text-purple-300 hover:bg-gray-700/90 shadow-purple-500/30"
+                    : "bg-white/90 border-purple-300/50 text-purple-600 hover:bg-purple-50/90 shadow-purple-300/30"
+                }`}
+              >
+                <Play className="w-6 h-6 drop-shadow-lg" />
+                <span>Watch Demo</span>
+              </Button>
+            </Link>
           </div>
 
           {/* Enhanced Feature Cards */}
