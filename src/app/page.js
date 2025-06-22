@@ -297,7 +297,6 @@ export default function MusicTutorLanding() {
             <Link href="/instruments">
               <Button
                 className={`bg-gradient-to-r ${currentThemeData.gradient} hover:scale-110 text-white px-10 py-5 rounded-3xl font-semibold text-xl flex items-center space-x-3 shadow-2xl ${currentThemeData.shadow} hover:shadow-3xl transition-all duration-300 border border-white/20`}
-                onClick={() => alert("Start Learning clicked!")}
               >
                 <Play className="w-6 h-6 drop-shadow-lg" />
                 <span>Start Learning</span>
