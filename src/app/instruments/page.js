@@ -7,12 +7,12 @@ import { Button } from "_components/ui/button"
 import {
   Piano,
   Guitar,
-  Drum,
-  Music,
-  Mic,
-  Volume2,
-  Radio,
-  Headphones,
+  Cello,
+  Violin,
+  Viola,
+  Flute,
+  Trumpet,
+  Trombone,
 } from "lucide-react"
 
 const instruments = [
@@ -33,52 +33,52 @@ const instruments = [
     hoverColor: "hover:bg-green-600",
   },
   {
-    id: "drums",
-    name: "Drums",
-    icon: Drum,
-    description: "Percussion powerhouse",
-    color: "bg-red-500",
-    hoverColor: "hover:bg-red-600",
+    id: "cello",
+    name: "Cello",
+    icon: Cello,
+    description: "Deep string resonance",
+    color: "bg-pink-500",
+    hoverColor: "hover:bg-pink-600",
   },
   {
     id: "violin",
     name: "Violin",
-    icon: Music,
+    icon: Violin,
     description: "Elegant string instrument",
     color: "bg-purple-500",
     hoverColor: "hover:bg-purple-600",
   },
   {
+    id: "viola",
+    name: "Viola",
+    icon: Viola,
+    description: "Rich alto voice",
+    color: "bg-indigo-500",
+    hoverColor: "hover:bg-indigo-600",
+  },
+  {
     id: "flute",
     name: "Flute",
-    icon: Mic,
+    icon: Flute,
     description: "Woodwind beauty",
     color: "bg-yellow-500",
     hoverColor: "hover:bg-yellow-600",
   },
   {
-    id: "saxophone",
-    name: "Saxophone",
-    icon: Volume2,
-    description: "Jazz classic",
+    id: "trumpet",
+    name: "Trumpet",
+    icon: Trumpet,
+    description: "Brass section leader",
     color: "bg-orange-500",
     hoverColor: "hover:bg-orange-600",
   },
   {
-    id: "trumpet",
-    name: "Trumpet",
-    icon: Radio,
-    description: "Brass section leader",
-    color: "bg-indigo-500",
-    hoverColor: "hover:bg-indigo-600",
-  },
-  {
-    id: "cello",
-    name: "Cello",
-    icon: Headphones,
-    description: "Deep string resonance",
-    color: "bg-pink-500",
-    hoverColor: "hover:bg-pink-600",
+    id: "trombone",
+    name: "Trombone",
+    icon: Trombone,
+    description: "Slide-driven brass",
+    color: "bg-red-500",
+    hoverColor: "hover:bg-red-600",
   },
 ]
 
@@ -88,7 +88,7 @@ export default function InstrumentsPage() {
   const handleClick = (name) => {
     setSelected(name)
     alert(`Opening ${name}…`)
-    // if you want to navigate instead of alert:
+    // to navigate instead, use:
     // import { useRouter } from "next/navigation"
     // const router = useRouter()
     // router.push(`/instruments/${name.toLowerCase()}`)
@@ -112,7 +112,7 @@ export default function InstrumentsPage() {
           </p>
         </div>
 
-        {/* Grid */}
+        {/* Instruments Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {instruments.map((ins) => {
             const Icon = ins.icon
