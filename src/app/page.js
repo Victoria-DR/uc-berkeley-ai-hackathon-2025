@@ -199,7 +199,7 @@ export default function MusicTutorLanding() {
                 isDarkMode ? "text-white" : "text-gray-800"
               } drop-shadow-lg`}
             >
-              MusicTutor
+              Crescendo
             </span>
           </div>
 
