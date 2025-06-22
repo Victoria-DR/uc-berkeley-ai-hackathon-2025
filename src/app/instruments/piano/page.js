@@ -1,25 +1,53 @@
 "use client"
 
-// import type React from "react"
-
 import { useState, useRef } from "react"
 import { Button } from "_components/ui/button"
 import { Card } from "_components/ui/card"
-import { Mic, Upload, Square, Play, Pause, Trash2, Music, Sparkles, ArrowLeft, MessageCircle } from "lucide-react"
+import {
+  Mic,
+  Upload,
+  Square,
+  Play,
+  Pause,
+  Trash2,
+  Music,
+  Sparkles,
+  MessageCircle,
+  ArrowLeft,
+  X
+} from "lucide-react"
+
 import { cn } from "_lib/utils"
+import { analyzeAudio } from "_lib/gemini/analyze"
 
 export default function PianoRecordingPage() {
   const [isRecording, setIsRecording] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
-  const [recordedAudio, setRecordedAudio] = useState(null);
-  const [uploadedFile, setUploadedFile] = useState(null);
-  const fileInputRef = useRef(null);
-  const mediaRecorderRef = useRef(null);
-  const audioRef = useRef(null);
+  const [recordedAudio, setRecordedAudio] = useState(null)
+  const [uploadedFile, setUploadedFile] = useState(null)
+  const fileInputRef = useRef(null)
+  const mediaRecorderRef = useRef(null)
+  const audioRef = useRef(null)
+  const [recordedBlob, setRecordedBlob] = useState(null)
 
   const [showMusicTypeChat, setShowMusicTypeChat] = useState(false)
   const [musicType, setMusicType] = useState("")
   const [isAnalyzing, setIsAnalyzing] = useState(false)
+  const [analysisResult, setAnalysisResult] = useState("")
+  const [showAnalysisModal, setShowAnalysisModal] = useState(false)
+
+  // Helper function to convert blob to base64
+  const blobToBase64 = (blob) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        const base64String = reader.result.split(",")[1] // Remove data:audio/wav;base64, prefix
+        resolve(base64String)
+      }
+      reader.onerror = reject
+      reader.readAsDataURL(blob)
+    })
+  }
 
   const startRecording = async () => {
     try {
@@ -34,6 +62,7 @@ export default function PianoRecordingPage() {
 
       mediaRecorder.onstop = () => {
         const blob = new Blob(chunks, { type: "audio/wav" })
+        setRecordedBlob(blob) // Store the blob for analysis
         const audioUrl = URL.createObjectURL(blob)
         setRecordedAudio(audioUrl)
         stream.getTracks().forEach((track) => track.stop())
@@ -54,13 +83,14 @@ export default function PianoRecordingPage() {
   }
 
   const handleFileUpload = (event) => {
-  const file = event.target.files?.[0]
-  if (file && file.type.startsWith("audio/")) {
-    setUploadedFile(file)
-    const audioUrl = URL.createObjectURL(file)
-    setRecordedAudio(audioUrl)
+    const file = event.target.files?.[0]
+    if (file && file.type.startsWith("audio/")) {
+      setUploadedFile(file)
+      setRecordedBlob(file) // Store the file for analysis
+      const audioUrl = URL.createObjectURL(file)
+      setRecordedAudio(audioUrl)
+    }
   }
-}
 
   const togglePlayback = () => {
     if (audioRef.current) {
@@ -80,10 +110,36 @@ export default function PianoRecordingPage() {
   const clearRecording = () => {
     setRecordedAudio(null)
     setUploadedFile(null)
+    setRecordedBlob(null)
     setIsPlaying(false)
+    setAnalysisResult("")
     if (audioRef.current) {
       audioRef.current.pause()
       audioRef.current.currentTime = 0
+    }
+  }
+
+  const handleAnalyzePerformance = async () => {
+    if (!recordedBlob) {
+      alert("No audio file to analyze")
+      return
+    }
+
+    setIsAnalyzing(true)
+    try {
+      // Convert audio blob to base64
+      const base64Audio = await blobToBase64(recordedBlob)
+
+      // Call the analyze function
+      const result = await analyzeAudio("Piano", musicType || "Unknown Piece", base64Audio)
+
+      setAnalysisResult(result)
+      setShowAnalysisModal(true)
+    } catch (error) {
+      console.error("Analysis failed:", error)
+      alert("Analysis failed. Please try again later.")
+    } finally {
+      setIsAnalyzing(false)
     }
   }
 
@@ -101,6 +157,7 @@ export default function PianoRecordingPage() {
           Back to Home
         </Button>
       </div>
+
       {/* Enhanced Background */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Animated gradient mesh */}
@@ -178,7 +235,7 @@ export default function PianoRecordingPage() {
               }}
             >
               <MessageCircle className="w-4 h-4 mr-2" />
-              {musicType ? "Music Type" : "Set Music Type"}
+              {musicType ? "Music Title" : "Title of Music"}
             </Button>
           </div>
 
@@ -186,13 +243,12 @@ export default function PianoRecordingPage() {
           {showMusicTypeChat && (
             <Card className="p-4 bg-white/90 backdrop-blur-sm border-0 shadow-xl">
               <div className="space-y-3">
-                <label className="text-sm font-medium text-gray-700">What type of music are you playing?</label>
                 <input
                   type="text"
                   value={musicType}
                   onChange={(e) => setMusicType(e.target.value)}
-                  placeholder="e.g., Classical, Jazz, Pop, Blues..."
                   className="w-full px-3 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white"
+                  placeholder="Enter the title of the piece you're practicing"
                   autoFocus
                 />
                 <div className="flex space-x-2">
@@ -316,18 +372,7 @@ export default function PianoRecordingPage() {
               <Button
                 className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 shadow-lg transform transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                 disabled={isAnalyzing}
-                onClick={async () => {
-                  setIsAnalyzing(true)
-                  try {
-                    // Your analyze code here - replace this with your actual analysis logic
-                    await new Promise((resolve) => setTimeout(resolve, 3000)) // Simulated delay
-                    console.log("Analysis complete!")
-                  } catch (error) {
-                    console.error("Analysis failed:", error)
-                  } finally {
-                    setIsAnalyzing(false)
-                  }
-                }}
+                onClick={handleAnalyzePerformance}
               >
                 {isAnalyzing ? (
                   <>
@@ -355,6 +400,38 @@ export default function PianoRecordingPage() {
           <input ref={fileInputRef} type="file" accept="audio/*" onChange={handleFileUpload} className="hidden" />
         </div>
       </div>
+
+      {/* Analysis Results Modal */}
+      {showAnalysisModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <Card className="w-full max-w-2xl max-h-[80vh] bg-white shadow-2xl overflow-hidden">
+            <div className="p-6 border-b border-gray-200 flex justify-between items-center">
+              <h3 className="text-xl font-semibold text-gray-900">Performance Analysis</h3>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowAnalysisModal(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X className="w-5 h-5" />
+              </Button>
+            </div>
+            <div className="p-6 overflow-y-auto max-h-[60vh]">
+              <div className="prose prose-sm max-w-none">
+                <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">{analysisResult}</div>
+              </div>
+            </div>
+            <div className="p-6 border-t border-gray-200 flex justify-end">
+              <Button
+                onClick={() => setShowAnalysisModal(false)}
+                className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600"
+              >
+                Close
+              </Button>
+            </div>
+          </Card>
+        </div>
+      )}
 
       <style jsx>{`
         @keyframes blob {
@@ -439,3 +516,4 @@ export default function PianoRecordingPage() {
     </div>
   )
 }
+

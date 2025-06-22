@@ -6,7 +6,7 @@ import { Card } from "_components/ui/card"
 import { Mic, Upload, Square, Play, Pause, Trash2, Music, Sparkles, MessageCircle, ArrowLeft } from "lucide-react"
 import { cn } from "_lib/utils"
 
-export default function GuitarRecordingPage() {
+export default function ViolinRecordingPage() {
   const [isRecording, setIsRecording] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
   const [recordedAudio, setRecordedAudio] = useState(null)
@@ -99,7 +99,7 @@ export default function GuitarRecordingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-100 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-100 relative overflow-hidden">
       {/* Header with navigation */}
       <div className="absolute top-0 left-0 right-0 z-20 p-4">
         <div className="flex justify-between items-center">
@@ -116,38 +116,38 @@ export default function GuitarRecordingPage() {
       </div>
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-orange-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-amber-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
-        <div className="absolute top-40 left-40 w-80 h-80 bg-yellow-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-green-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-emerald-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
+        <div className="absolute top-40 left-40 w-80 h-80 bg-teal-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
       </div>
 
       {/* Floating music notes */}
       <div className="absolute inset-0 pointer-events-none">
-        <Music className="absolute top-20 left-20 w-6 h-6 text-orange-300 animate-float" />
-        <Music className="absolute top-40 right-32 w-4 h-4 text-amber-300 animate-float animation-delay-1000" />
-        <Music className="absolute bottom-40 left-32 w-5 h-5 text-yellow-300 animate-float animation-delay-2000" />
-        <Sparkles className="absolute top-60 right-20 w-5 h-5 text-orange-400 animate-pulse" />
+        <Music className="absolute top-20 left-20 w-6 h-6 text-green-300 animate-float" />
+        <Music className="absolute top-40 right-32 w-4 h-4 text-emerald-300 animate-float animation-delay-1000" />
+        <Music className="absolute bottom-40 left-32 w-5 h-5 text-teal-300 animate-float animation-delay-2000" />
+        <Sparkles className="absolute top-60 right-20 w-5 h-5 text-green-400 animate-pulse" />
       </div>
 
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-4">
         <div className="w-full max-w-md space-y-8">
           {/* Header */}
           <div className="text-center space-y-4">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full shadow-lg mb-4">
-              <div className="text-3xl">🎸</div>
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full shadow-lg mb-4">
+              <div className="text-3xl">🎻</div>
             </div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
-              Guitar Practice
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+              Violin Practice
             </h1>
             <p className="text-gray-600 text-lg">Record your performance or upload an audio file</p>
           </div>
 
           {/* Selected Music Type */}
           {musicType && (
-            <Card className="p-4 bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200 shadow-md">
+            <Card className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 border-green-200 shadow-md">
               <div className="flex items-center justify-center space-x-2">
-                <Music className="w-5 h-5 text-orange-600" />
-                <span className="text-orange-800 font-medium">Practicing: {musicType}</span>
+                <Music className="w-5 h-5 text-green-600" />
+                <span className="text-green-800 font-medium">Practicing: {musicType}</span>
               </div>
             </Card>
           )}
@@ -170,7 +170,7 @@ export default function GuitarRecordingPage() {
             <Card className="p-6 bg-white/80 backdrop-blur-sm border-0 shadow-xl">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gradient-to-r from-green-400 to-amber-500 rounded-full flex items-center justify-center">
+                  <div className="w-10 h-10 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center">
                     <Music className="w-5 h-5 text-white" />
                   </div>
                   <div>
@@ -258,7 +258,7 @@ export default function GuitarRecordingPage() {
           {/* Action Buttons */}
           {(recordedAudio || uploadedFile) && (
             <div className="space-y-4 animate-in slide-in-from-bottom-4 duration-500">
-              <Button className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 shadow-lg transform transition-all duration-200 hover:scale-105">
+              <Button className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 shadow-lg transform transition-all duration-200 hover:scale-105">
                 <Sparkles className="w-5 h-5 mr-2" />
                 Analyze Performance
               </Button>
@@ -283,7 +283,7 @@ export default function GuitarRecordingPage() {
           <Card className="w-full max-w-md bg-white shadow-2xl">
             <div className="p-6">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">Title of Music</h3>
+                <h3 className="text-lg font-semibold text-gray-900">Select Music Title</h3>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -295,14 +295,13 @@ export default function GuitarRecordingPage() {
               </div>
               <form onSubmit={handleChatSubmit} className="space-y-4">
                 <div>
-                  <label htmlFor="musicType" className="block text-sm font-medium text-gray-700 mb-2">
-                  </label>
+                  
                   <input
                     id="musicType"
                     type="text"
                     value={musicType}
                     onChange={(e) => setMusicType(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
                   />
                 </div>
                 <div className="flex space-x-3">
@@ -311,7 +310,7 @@ export default function GuitarRecordingPage() {
                   </Button>
                   <Button
                     type="submit"
-                    className="flex-1 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600"
+                    className="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600"
                   >
                     Set Title
                   </Button>
@@ -365,3 +364,4 @@ export default function GuitarRecordingPage() {
     </div>
   )
 }
+
