@@ -21,6 +21,9 @@ export default function PianoRecordingPage() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [recordedAudio, setRecordedAudio] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
+  const [base64AudioFile, setBase64AudioFile] = useState(null);
+  const [songTitle, setSongTitle] = useState("");
+  const [analysis, setAnalysis] = useState("");
   const fileInputRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioRef = useRef(null);
@@ -45,10 +48,8 @@ export default function PianoRecordingPage() {
         const reader = new FileReader();
         reader.readAsDataURL(blob);
         reader.onloadend = () => {
-        const base64AudioFile = reader.result;
-        console.log("Base64 Audio File:", base64AudioFile);
-        analyzeAudio(base64AudioFile.split(",")[1]);
-      };
+          setBase64AudioFile(reader.result);
+        };
       };
 
       mediaRecorder.start();
@@ -241,7 +242,17 @@ export default function PianoRecordingPage() {
           {/* Action Buttons */}
           {(recordedAudio || uploadedFile) && (
             <div className="space-y-4 animate-in slide-in-from-bottom-4 duration-500">
-              <Button className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 shadow-lg transform transition-all duration-200 hover:scale-105">
+              <Button
+                className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 shadow-lg transform transition-all duration-200 hover:scale-105"
+                onClick={async () => {
+                  const result = await analyzeAudio(
+                    "piano",
+                    songTitle,
+                    base64AudioFile.split(",")[1]
+                  );
+                  setAnalysis(result);
+                }}
+              >
                 <Sparkles className="w-5 h-5 mr-2" />
                 Analyze Performance
               </Button>
@@ -252,6 +263,7 @@ export default function PianoRecordingPage() {
               >
                 Save Recording
               </Button>
+              { analysis }
             </div>
           )}
 
