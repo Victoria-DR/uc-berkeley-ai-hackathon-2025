@@ -1,10 +1,10 @@
 "use client"
 
 import { useState, useRef } from "react"
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Button } from "@/_components/ui/button";
+import { Card } from "@/_components/ui/card";
 import { Mic, Upload, Square, Play, Pause, Trash2, Music, Sparkles } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/_lib/utils"
 
 export default function GuitarRecordingPage() {
   const [isRecording, setIsRecording] = useState(false)
