@@ -218,13 +218,15 @@ export default function MusicTutorLanding() {
             >
               Features
             </span>
-            <span
-              className={`cursor-default hover:scale-105 transition-transform duration-200 ${
-                isDarkMode ? "text-gray-300" : "text-gray-600"
-              } drop-shadow-sm`}
-            >
-              Instruments
-            </span>
+            <Link href="/instruments">
+              <span
+                className={`cursor-default hover:scale-105 transition-transform duration-200 ${
+                  isDarkMode ? "text-gray-300" : "text-gray-600"
+                } drop-shadow-sm`}
+              >
+                Instruments
+              </span>
+            </Link>
             <span
               className={`cursor-default hover:scale-105 transition-transform duration-200 ${
                 isDarkMode ? "text-gray-300" : "text-gray-600"
