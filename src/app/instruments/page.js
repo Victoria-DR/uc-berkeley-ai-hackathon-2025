@@ -417,3 +417,5 @@ export default function MusicTutorLanding() {
         )}
       </div>
     </div>
+  );
+}

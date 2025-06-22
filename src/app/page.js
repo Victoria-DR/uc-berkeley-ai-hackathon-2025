@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Button } from "_components/ui/button";
 import { Music, Play, Sparkles, MessageCircle, X, Star } from "lucide-react";
@@ -104,21 +105,35 @@ export default function MusicTutorLanding() {
         <div className="absolute top-3/4 left-16 w-4 h-4 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full opacity-60 animate-pulse shadow-md shadow-blue-400/40"></div>
 
         {/* Glowing Musical Notes */}
-        <div className="absolute top-24 right-1/4 text-pink-400 opacity-50 text-xl animate-bounce drop-shadow-lg">♪</div>
-        <div className="absolute bottom-24 left-1/3 text-purple-400 opacity-40 text-2xl animate-pulse drop-shadow-lg">♫</div>
-        <div className="absolute top-2/3 right-20 text-blue-400 opacity-60 text-lg animate-ping drop-shadow-lg">♬</div>
-        <div className="absolute top-1/3 left-1/4 text-pink-400 opacity-45 text-lg animate-bounce drop-shadow-lg">♩</div>
+        <div className="absolute top-24 right-1/4 text-pink-400 opacity-50 text-xl animate-bounce drop-shadow-lg">
+          ♪
+        </div>
+        <div className="absolute bottom-24 left-1/3 text-purple-400 opacity-40 text-2xl animate-pulse drop-shadow-lg">
+          ♫
+        </div>
+        <div className="absolute top-2/3 right-20 text-blue-400 opacity-60 text-lg animate-ping drop-shadow-lg">
+          ♬
+        </div>
+        <div className="absolute top-1/3 left-1/4 text-pink-400 opacity-45 text-lg animate-bounce drop-shadow-lg">
+          ♩
+        </div>
       </div>
 
       {/* Enhanced Left Sidebar */}
       <div className="fixed left-0 top-1/2 transform -translate-y-1/2 z-20">
         <div
           className={`backdrop-blur-xl rounded-r-3xl p-6 space-y-8 border-r-2 shadow-2xl transition-all duration-500 ${
-            isDarkMode ? "bg-gray-800/90 border-purple-500/30 shadow-purple-500/20" : "bg-white/90 border-white/40 shadow-white/30"
+            isDarkMode
+              ? "bg-gray-800/90 border-purple-500/30 shadow-purple-500/20"
+              : "bg-white/90 border-white/40 shadow-white/30"
           }`}
         >
           <div className="text-center">
-            <div className={`text-sm font-bold mb-3 tracking-wider ${isDarkMode ? "text-pink-300" : "text-purple-600"}`}>
+            <div
+              className={`text-sm font-bold mb-3 tracking-wider ${
+                isDarkMode ? "text-pink-300" : "text-purple-600"
+              }`}
+            >
               THEME
             </div>
             <button
@@ -126,26 +141,46 @@ export default function MusicTutorLanding() {
               className={`w-12 h-12 bg-gradient-to-br ${currentThemeData.gradient} rounded-2xl flex items-center justify-center hover:scale-125 transition-all duration-300 ${currentThemeData.shadow} hover:shadow-xl border-2 border-white/30`}
             >
               <div className="w-7 h-7 bg-white/90 rounded-full flex items-center justify-center backdrop-blur-sm">
-                <div className={`w-4 h-4 bg-gradient-to-br ${currentThemeData.gradient} rounded-full animate-pulse`}></div>
+                <div
+                  className={`w-4 h-4 bg-gradient-to-br ${currentThemeData.gradient} rounded-full animate-pulse`}
+                ></div>
               </div>
             </button>
-            <div className="text-xs mt-2 font-medium opacity-70">{currentThemeData.name}</div>
+            <div className="text-xs mt-2 font-medium opacity-70">
+              {currentThemeData.name}
+            </div>
           </div>
 
           <div className="flex flex-col items-center space-y-6">
-            <Sparkles className={`w-7 h-7 ${isDarkMode ? "text-purple-300" : "text-purple-500"} drop-shadow-lg animate-pulse`} />
+            <Sparkles
+              className={`w-7 h-7 ${
+                isDarkMode ? "text-purple-300" : "text-purple-500"
+              } drop-shadow-lg animate-pulse`}
+            />
             <button
               onClick={handleModeToggle}
               className={`w-8 h-8 rounded-xl flex items-center justify-center hover:scale-125 transition-all duration-300 shadow-lg border-2 border-white/30 ${
-                isDarkMode ? "bg-gradient-to-br from-gray-700 to-gray-600 shadow-gray-500/30" : "bg-gradient-to-br from-purple-100 to-purple-200 shadow-purple-300/30"
+                isDarkMode
+                  ? "bg-gradient-to-br from-gray-700 to-gray-600 shadow-gray-500/30"
+                  : "bg-gradient-to-br from-purple-100 to-purple-200 shadow-purple-300/30"
               }`}
             >
-              <div className={`w-4 h-4 rounded ${isDarkMode ? "bg-purple-300" : "bg-purple-500"} animate-pulse`}></div>
+              <div
+                className={`w-4 h-4 rounded ${
+                  isDarkMode ? "bg-purple-300" : "bg-purple-500"
+                } animate-pulse`}
+              ></div>
             </button>
           </div>
 
           <div className="text-center">
-            <div className={`text-sm font-bold tracking-wider ${isDarkMode ? "text-purple-300" : "text-purple-600"}`}>MODE</div>
+            <div
+              className={`text-sm font-bold tracking-wider ${
+                isDarkMode ? "text-purple-300" : "text-purple-600"
+              }`}
+            >
+              MODE
+            </div>
           </div>
         </div>
       </div>
@@ -159,14 +194,44 @@ export default function MusicTutorLanding() {
             >
               <Music className="w-7 h-7 text-white drop-shadow-lg" />
             </div>
-            <span className={`text-3xl font-bold ${isDarkMode ? "text-white" : "text-gray-800"} drop-shadow-lg`}>MusicTutor</span>
+            <span
+              className={`text-3xl font-bold ${
+                isDarkMode ? "text-white" : "text-gray-800"
+              } drop-shadow-lg`}
+            >
+              MusicTutor
+            </span>
           </div>
 
           <div className="hidden md:flex items-center space-x-10">
-            <span className={`font-semibold cursor-default hover:scale-105 transition-transform duration-200 ${isDarkMode ? "text-pink-300" : "text-purple-600"} drop-shadow-sm`}>Home</span>
-            <span className={`cursor-default hover:scale-105 transition-transform duration-200 ${isDarkMode ? "text-gray-300" : "text-gray-600"} drop-shadow-sm`}>Features</span>
-            <span className={`cursor-default hover:scale-105 transition-transform duration-200 ${isDarkMode ? "text-gray-300" : "text-gray-600"} drop-shadow-sm`}>Instruments</span>
-            <span className={`cursor-default hover:scale-105 transition-transform duration-200 ${isDarkMode ? "text-gray-300" : "text-gray-600"} drop-shadow-sm`}>About</span>
+            <span
+              className={`font-semibold cursor-default hover:scale-105 transition-transform duration-200 ${
+                isDarkMode ? "text-pink-300" : "text-purple-600"
+              } drop-shadow-sm`}
+            >
+              Home
+            </span>
+            <span
+              className={`cursor-default hover:scale-105 transition-transform duration-200 ${
+                isDarkMode ? "text-gray-300" : "text-gray-600"
+              } drop-shadow-sm`}
+            >
+              Features
+            </span>
+            <span
+              className={`cursor-default hover:scale-105 transition-transform duration-200 ${
+                isDarkMode ? "text-gray-300" : "text-gray-600"
+              } drop-shadow-sm`}
+            >
+              Instruments
+            </span>
+            <span
+              className={`cursor-default hover:scale-105 transition-transform duration-200 ${
+                isDarkMode ? "text-gray-300" : "text-gray-600"
+              } drop-shadow-sm`}
+            >
+              About
+            </span>
           </div>
 
           <Button
@@ -184,11 +249,19 @@ export default function MusicTutorLanding() {
           {/* Shiny Badge */}
           <div
             className={`inline-flex items-center space-x-3 backdrop-blur-xl rounded-full px-8 py-4 mb-16 border-2 shadow-2xl hover:scale-105 transition-all duration-300 ${
-              isDarkMode ? "bg-gray-800/90 border-purple-400/30 shadow-purple-500/30" : "bg-white/90 border-white/40 shadow-white/40"
+              isDarkMode
+                ? "bg-gray-800/90 border-purple-400/30 shadow-purple-500/30"
+                : "bg-white/90 border-white/40 shadow-white/40"
             }`}
           >
             <Sparkles className="w-6 h-6 text-pink-500 animate-spin drop-shadow-lg" />
-            <span className={`font-semibold text-lg ${isDarkMode ? "text-pink-300" : "text-purple-600"} drop-shadow-sm`}>AI-Powered Music Learning</span>
+            <span
+              className={`font-semibold text-lg ${
+                isDarkMode ? "text-pink-300" : "text-purple-600"
+              } drop-shadow-sm`}
+            >
+              AI-Powered Music Learning
+            </span>
             <Star className="w-6 h-6 text-yellow-400 animate-pulse drop-shadow-lg" />
           </div>
 
@@ -196,9 +269,13 @@ export default function MusicTutorLanding() {
           <h1 className="text-6xl md:text-7xl lg:text-9xl font-bold mb-10 leading-tight">
             <span
               className={`bg-gradient-to-r bg-clip-text text-transparent drop-shadow-2xl ${
-                isDarkMode ? "from-pink-300 via-purple-300 to-blue-300" : "from-pink-500 via-purple-600 to-blue-600"
+                isDarkMode
+                  ? "from-pink-300 via-purple-300 to-blue-300"
+                  : "from-pink-500 via-purple-600 to-blue-600"
               }`}
-              style={{ filter: "drop-shadow(0 0 20px rgba(147, 51, 234, 0.3))" }}
+              style={{
+                filter: "drop-shadow(0 0 20px rgba(147, 51, 234, 0.3))",
+              }}
             >
               Master Your Music
             </span>
@@ -244,7 +321,9 @@ export default function MusicTutorLanding() {
           <div className="grid md:grid-cols-3 gap-10 max-w-6xl mx-auto">
             <div
               className={`backdrop-blur-xl rounded-3xl p-10 border-2 hover:scale-105 transition-all duration-300 shadow-2xl ${
-                isDarkMode ? "bg-gray-800/90 border-gray-600/30 shadow-gray-500/20" : "bg-white/90 border-white/40 shadow-white/30"
+                isDarkMode
+                  ? "bg-gray-800/90 border-gray-600/30 shadow-gray-500/20"
+                  : "bg-white/90 border-white/40 shadow-white/30"
               }`}
             >
               <div
@@ -252,42 +331,70 @@ export default function MusicTutorLanding() {
               >
                 <Music className="w-10 h-10 text-white drop-shadow-lg" />
               </div>
-              <h3 className={`text-2xl font-bold mb-6 ${isDarkMode ? "text-purple-300" : "text-purple-600"} drop-shadow-sm`}>
+              <h3
+                className={`text-2xl font-bold mb-6 ${
+                  isDarkMode ? "text-purple-300" : "text-purple-600"
+                } drop-shadow-sm`}
+              >
                 AI Analysis
               </h3>
-              <p className={`text-lg ${isDarkMode ? "text-gray-300" : "text-gray-600"} drop-shadow-sm`}>
+              <p
+                className={`text-lg ${
+                  isDarkMode ? "text-gray-300" : "text-gray-600"
+                } drop-shadow-sm`}
+              >
                 Get instant feedback on your performance
               </p>
             </div>
 
             <div
               className={`backdrop-blur-xl rounded-3xl p-10 border-2 hover:scale-105 transition-all duration-300 shadow-2xl ${
-                isDarkMode ? "bg-gray-800/90 border-gray-600/30 shadow-gray-500/20" : "bg-white/90 border-white/40 shadow-white/30"
+                isDarkMode
+                  ? "bg-gray-800/90 border-gray-600/30 shadow-gray-500/20"
+                  : "bg-white/90 border-white/40 shadow-white/30"
               }`}
             >
               <div className="w-20 h-20 bg-gradient-to-br from-purple-400 to-purple-500 rounded-3xl flex items-center justify-center mb-8 mx-auto shadow-xl shadow-purple-400/50 border-2 border-white/20">
                 <Play className="w-10 h-10 text-white drop-shadow-lg" />
               </div>
-              <h3 className={`text-2xl font-bold mb-6 ${isDarkMode ? "text-purple-300" : "text-purple-600"} drop-shadow-sm`}>
+              <h3
+                className={`text-2xl font-bold mb-6 ${
+                  isDarkMode ? "text-purple-300" : "text-purple-600"
+                } drop-shadow-sm`}
+              >
                 Interactive Lessons
               </h3>
-              <p className={`text-lg ${isDarkMode ? "text-gray-300" : "text-gray-600"} drop-shadow-sm`}>
+              <p
+                className={`text-lg ${
+                  isDarkMode ? "text-gray-300" : "text-gray-600"
+                } drop-shadow-sm`}
+              >
                 Learn with engaging, step-by-step lessons
               </p>
             </div>
 
             <div
               className={`backdrop-blur-xl rounded-3xl p-10 border-2 hover:scale-105 transition-all duration-300 shadow-2xl ${
-                isDarkMode ? "bg-gray-800/90 border-gray-600/30 shadow-gray-500/20" : "bg-white/90 border-white/40 shadow-white/30"
+                isDarkMode
+                  ? "bg-gray-800/90 border-gray-600/30 shadow-gray-500/20"
+                  : "bg-white/90 border-white/40 shadow-white/30"
               }`}
             >
               <div className="w-20 h-20 bg-gradient-to-br from-blue-400 to-blue-500 rounded-3xl flex items-center justify-center mb-8 mx-auto shadow-xl shadow-blue-400/50 border-2 border-white/20">
                 <Sparkles className="w-10 h-10 text-white drop-shadow-lg" />
               </div>
-              <h3 className={`text-2xl font-bold mb-6 ${isDarkMode ? "text-purple-300" : "text-purple-600"} drop-shadow-sm`}>
+              <h3
+                className={`text-2xl font-bold mb-6 ${
+                  isDarkMode ? "text-purple-300" : "text-purple-600"
+                } drop-shadow-sm`}
+              >
                 Progress Tracking
               </h3>
-              <p className={`text-lg ${isDarkMode ? "text-gray-300" : "text-gray-600"} drop-shadow-sm`}>
+              <p
+                className={`text-lg ${
+                  isDarkMode ? "text-gray-300" : "text-gray-600"
+                } drop-shadow-sm`}
+              >
                 Monitor your improvement with detailed analytics
               </p>
             </div>
@@ -297,7 +404,14 @@ export default function MusicTutorLanding() {
 
       {/* Enhanced Chatbox */}
       <div className="fixed bottom-8 right-8 z-50">
-        {!isChatOpen ? (
+        <Link href="/chat">
+          <Button
+            className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-full shadow-2xl shadow-purple-500/50 flex items-center justify-center hover:scale-125 transition-all duration-300 border-2 border-white/20 animate-pulse"
+          >
+            <MessageCircle className="w-7 h-7 drop-shadow-lg" />
+          </Button>
+        </Link>
+        {/* {!isChatOpen ? (
           <Button
             onClick={() => setIsChatOpen(true)}
             className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-full shadow-2xl shadow-purple-500/50 flex items-center justify-center hover:scale-125 transition-all duration-300 border-2 border-white/20 animate-pulse"
@@ -357,8 +471,9 @@ export default function MusicTutorLanding() {
               </div>
             </div>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );
 }
+
