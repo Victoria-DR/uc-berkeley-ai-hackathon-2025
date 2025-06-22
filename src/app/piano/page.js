@@ -14,6 +14,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { cn } from "@/_components/lib/utils";
+import { analyzeAudio } from "@/_lib/gemini/analyze";
 
 export default function PianoRecordingPage() {
   const [isRecording, setIsRecording] = useState(false);
@@ -40,6 +41,14 @@ export default function PianoRecordingPage() {
         const audioUrl = URL.createObjectURL(blob);
         setRecordedAudio(audioUrl);
         stream.getTracks().forEach((track) => track.stop());
+
+        const reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onloadend = () => {
+        const base64AudioFile = reader.result;
+        console.log("Base64 Audio File:", base64AudioFile);
+        analyzeAudio(base64AudioFile.split(",")[1]);
+      };
       };
 
       mediaRecorder.start();
@@ -49,7 +58,7 @@ export default function PianoRecordingPage() {
     }
   };
 
-  const stopRecording = () => {
+  const stopRecording = async () => {
     if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
