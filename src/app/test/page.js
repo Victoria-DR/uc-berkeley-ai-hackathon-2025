@@ -1,15 +1,25 @@
 "use client";
 
-export default function TestPage() {
+import dynamic from "next/dynamic";
+const ReactMediaRecorder = dynamic(
+  () => import("react-media-recorder").then((mod) => mod.ReactMediaRecorder),
+  { ssr: false }
+);
+
+export default function Record() {
   return (
-    <div className="">
-      <h1>Test Page</h1>
-      <p>This is a test page for the Google GenAI integration.</p>
-      <button
-        onClick={() => alert("This button will trigger the AI function.")}
-      >
-        Test AI Function
-      </button>
+    <div>
+      <ReactMediaRecorder
+        video
+        render={({ status, startRecording, stopRecording, mediaBlobUrl }) => (
+          <div>
+            <p>{status}</p>
+            <button onClick={startRecording}>Start Recording</button>
+            <button onClick={stopRecording}>Stop Recording</button>
+            <video src={mediaBlobUrl} controls autoPlay loop />
+          </div>
+        )}
+      />
     </div>
   );
 }
