@@ -2,8 +2,9 @@
 
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
-import ReactMarkdown from 'react-markdown'; 
-import remarkGfm from 'remark-gfm'; 
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw'; // Import rehype-raw
 
 function Analysis() {
   const searchParams = useSearchParams();
@@ -14,7 +15,18 @@ function Analysis() {
       <h1 className="text-2xl font-bold text-gray-900 mb-4">Analysis</h1>
       {/* Render Markdown content */}
       <div className="prose max-w-none"> {/* Add 'prose' class for basic styling */}
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>{data}</ReactMarkdown>
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          rehypePlugins={[rehypeRaw]} // Add rehypeRaw to process raw HTML
+          components={{
+            // Example: Map h1 markdown to render as h2 HTML
+            h1: 'h2',
+            // Example: Customize emphasis to be red and italic
+            em: ({node, ...props}) => <i style={{color: 'red'}} {...props} />,            
+          }}
+        >
+          {data}
+        </ReactMarkdown>
       </div>
     </div>
   );
@@ -65,14 +77,24 @@ export default function AnalysisPage() {
   );
 }
 
+// "use client";
+
+// import { useSearchParams } from "next/navigation";
+// import { Suspense } from "react";
+// import ReactMarkdown from 'react-markdown'; 
+// import remarkGfm from 'remark-gfm'; 
+
 // function Analysis() {
 //   const searchParams = useSearchParams();
 //   const data = searchParams.get("data");
 
 //   return (
 //     <div className="p-6 bg-white/80 backdrop-blur-sm border-0 shadow-xl rounded-2xl space-y-4">
-//       <h1 className="text-2xl font-bold text-gray-900">Analysis</h1>
-//       <p className="text-gray-700">{data}</p>
+//       <h1 className="text-2xl font-bold text-gray-900 mb-4">Analysis</h1>
+//       {/* Render Markdown content */}
+//       <div className="prose max-w-none"> {/* Add 'prose' class for basic styling */}
+//         <ReactMarkdown remarkPlugins={[remarkGfm]}>{data}</ReactMarkdown>
+//       </div>
 //     </div>
 //   );
 // }

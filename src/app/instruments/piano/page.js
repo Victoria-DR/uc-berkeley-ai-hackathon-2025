@@ -1,123 +1,139 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { useState, useRef, useEffect } from "react";
-import { Button } from "@/_components/ui/button";
-import { Card } from "@/_components/ui/card";
-import {
-  Mic,
-  Upload,
-  Square,
-  Play,
-  Pause,
-  Trash2,
-  Music,
-  Sparkles,
-} from "lucide-react";
-import { cn } from "@/_lib/utils";
-import { analyzeAudio } from "@/_lib/gemini/analyze";
+// import type React from "react"
 
-
+import { useState, useRef } from "react"
+import { Button } from "_components/ui/button"
+import { Card } from "_components/ui/card"
+import { Mic, Upload, Square, Play, Pause, Trash2, Music, Sparkles, ArrowLeft, MessageCircle } from "lucide-react"
+import { cn } from "_lib/utils"
 
 export default function PianoRecordingPage() {
-  const [isRecording, setIsRecording] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isRecording, setIsRecording] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(false)
   const [recordedAudio, setRecordedAudio] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
-  const [base64AudioFile, setBase64AudioFile] = useState(null);
-  const [songTitle, setSongTitle] = useState(""); // change back later vv
-  const [analysis, setAnalysis] = useState(`This is a performance of Chopin's Minute Waltz (Waltz in D-flat major, Op. 64, No. 1). Here's an analysis of your playing: ### Strengths: * **Consistent Rhythmic Drive:** You maintain a good underlying pulse throughout the piece, giving it a solid rhythmic foundation, particularly evident in the faster passages (e.g., **0:08-0:14** and **0:53-0:58**). * **Good Finger Dexterity and Clarity:** Your notes are generally well-articulated and clear, even in rapid runs, which prevents the sound from becoming muddy (e.g., **0:22-0:25** and **0:38-0:41**). * **Emerging Musicality:** There's an evident attempt to shape phrases and connect musical ideas, showing potential for more expressive interpretation. The transition around **1:00-1:05** shows a thoughtful approach to the changing character. ### Areas for Improvement: * **Limited Dynamic Range:** The performance largely remains at a mezzo-forte to forte level. Exploring a wider range of dynamics (from soft *piano* to loud *fortissimo*) would add significant emotional depth and contrast, especially at the opening (**0:08**) and in repeated sections (**0:53-0:58**). * **Lack of Consistent Legato and Lyrical Phrasing:** While articulation is good, the melodic lines sometimes feel less connected or "singing." Focus on creating smoother, longer legato phrases, particularly in the lyrical sections (e.g., **0:15-0:20**) and ensuring a more fluid transition between sections (e.g., **0:25-0:28**). * **Occasional Tempo Instability and Rhythmic Stiffness:** While the overall tempo is good, there are moments where it slightly rushes (e.g., **0:20-0:21** and **0:37-0:38**). Work on maintaining a more relaxed and consistent tempo, allowing the waltz character to breathe and flow naturally rather than feeling rushed. ### Resources for an Ideal Performance: To hear what an ideal performance of Chopin's Minute Waltz sounds like, focusing on nuanced dynamics, fluid phrasing, and a graceful waltz tempo, I recommend listening to recordings by: * **Arthur Rubinstein:** Known for his elegant and refined Chopin interpretations. Listen to his performance for the subtle dynamic shifts and beautiful legato phrasing. * [Arthur Rubinstein - Chopin: Waltz in D-flat major, Op. 64 No. 1 "Minute"](https://www.youtube.com/watch?v=F3S0w2tq04E) (Pay close attention to the dynamic swells and decays from **0:00-0:15** and the singing quality of the melody at **0:20-0:30**). * **Martha Argerich:** Offers a more fiery and virtuosic, yet still deeply musical, interpretation, showcasing impressive dynamic contrast and rhythmic vitality. * [Martha Argerich - Chopin: Waltz in D-flat major, Op. 64 No. 1 "Minute"](https://www.youtube.com/watch?v=gT-x00WJ0dM) (Notice her dynamic control throughout, especially the clear but not overly loud opening, and the incredible energy and rhythmic precision from **0:40 onwards**).`);
-  const [analysisDone, setAnalysisDone] = useState(false); //change back later
-  const [showModal, setShowModal] = useState(false); 
   const fileInputRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioRef = useRef(null);
 
+  const [showMusicTypeChat, setShowMusicTypeChat] = useState(false)
+  const [musicType, setMusicType] = useState("")
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
+
   const startRecording = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
-      mediaRecorderRef.current = mediaRecorder;
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      const mediaRecorder = new MediaRecorder(stream)
+      mediaRecorderRef.current = mediaRecorder
 
-      const chunks = [];
+      const chunks = []
       mediaRecorder.ondataavailable = (event) => {
-        chunks.push(event.data);
-      };
+        chunks.push(event.data)
+      }
 
       mediaRecorder.onstop = () => {
-        const blob = new Blob(chunks, { type: "audio/wav" });
-        const audioUrl = URL.createObjectURL(blob);
-        setRecordedAudio(audioUrl);
-        stream.getTracks().forEach((track) => track.stop());
+        const blob = new Blob(chunks, { type: "audio/wav" })
+        const audioUrl = URL.createObjectURL(blob)
+        setRecordedAudio(audioUrl)
+        stream.getTracks().forEach((track) => track.stop())
+      }
 
-        const reader = new FileReader();
-        reader.readAsDataURL(blob);
-        reader.onloadend = () => {
-          setBase64AudioFile(reader.result);
-        };
-      };
-
-      mediaRecorder.start();
-      setIsRecording(true);
+      mediaRecorder.start()
+      setIsRecording(true)
     } catch (error) {
-      console.error("Error accessing microphone:", error);
+      console.error("Error accessing microphone:", error)
     }
-  };
+  }
 
-  const stopRecording = async () => {
+  const stopRecording = () => {
     if (mediaRecorderRef.current && isRecording) {
-      mediaRecorderRef.current.stop();
-      setIsRecording(false);
+      mediaRecorderRef.current.stop()
+      setIsRecording(false)
     }
-  };
+  }
 
   const handleFileUpload = (event) => {
-    const file = event.target.files?.[0];
-    if (file && file.type.startsWith("audio/")) {
-      setUploadedFile(file);
-      const audioUrl = URL.createObjectURL(file);
-      setRecordedAudio(audioUrl);
-    }
-  };
+  const file = event.target.files?.[0]
+  if (file && file.type.startsWith("audio/")) {
+    setUploadedFile(file)
+    const audioUrl = URL.createObjectURL(file)
+    setRecordedAudio(audioUrl)
+  }
+}
 
   const togglePlayback = () => {
     if (audioRef.current) {
       if (isPlaying) {
-        audioRef.current.pause();
+        audioRef.current.pause()
       } else {
-        audioRef.current.play();
+        audioRef.current.play()
       }
-      setIsPlaying(!isPlaying);
+      setIsPlaying(!isPlaying)
     }
-  };
+  }
 
   const handleAudioEnded = () => {
-    setIsPlaying(false);
-  };
+    setIsPlaying(false)
+  }
 
   const clearRecording = () => {
-    setRecordedAudio(null);
-    setUploadedFile(null);
-    setIsPlaying(false);
+    setRecordedAudio(null)
+    setUploadedFile(null)
+    setIsPlaying(false)
     if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
+      audioRef.current.pause()
+      audioRef.current.currentTime = 0
     }
-  };
-
-  useEffect(() => {
-    if (analysisDone) {
-      setShowModal(true);
-    }
-  }, [analysisDone]);
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 relative overflow-hidden">
-      {/* Background decorative elements */}
+      {/* Back Button */}
+      <div className="absolute top-6 left-6 z-20">
+        <Button
+          variant="outline"
+          size="sm"
+          className="bg-white/80 backdrop-blur-sm border-gray-200 hover:bg-white shadow-md"
+          onClick={() => window.history.back()}
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Home
+        </Button>
+      </div>
+      {/* Enhanced Background */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
-        <div className="absolute top-40 left-40 w-80 h-80 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
+        {/* Animated gradient mesh */}
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-100 via-sky-50 to-purple-100"></div>
+        <div className="absolute inset-0 bg-gradient-to-tl from-pink-100 via-transparent to-blue-100 opacity-60"></div>
+
+        {/* Large animated blobs */}
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-purple-300 to-pink-300 rounded-full mix-blend-multiply filter blur-2xl opacity-60 animate-blob"></div>
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-blue-300 to-cyan-300 rounded-full mix-blend-multiply filter blur-2xl opacity-60 animate-blob animation-delay-2000"></div>
+        <div className="absolute top-40 left-40 w-80 h-80 bg-gradient-to-bl from-indigo-300 to-purple-300 rounded-full mix-blend-multiply filter blur-2xl opacity-60 animate-blob animation-delay-4000"></div>
+        <div className="absolute bottom-20 right-20 w-72 h-72 bg-gradient-to-tr from-rose-300 to-orange-300 rounded-full mix-blend-multiply filter blur-2xl opacity-50 animate-blob animation-delay-6000"></div>
+
+        {/* Medium floating orbs */}
+        <div className="absolute top-1/4 right-1/4 w-32 h-32 bg-gradient-to-r from-violet-400 to-purple-400 rounded-full filter blur-xl opacity-40 animate-float-slow"></div>
+        <div className="absolute bottom-1/3 left-1/3 w-24 h-24 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full filter blur-lg opacity-40 animate-float-slow animation-delay-3000"></div>
+
+        {/* Sparkle particles */}
+        <div className="absolute top-20 left-1/4 w-2 h-2 bg-white rounded-full opacity-60 animate-twinkle"></div>
+        <div className="absolute top-1/3 right-1/3 w-1 h-1 bg-purple-300 rounded-full opacity-80 animate-twinkle animation-delay-1000"></div>
+        <div className="absolute bottom-1/4 left-1/5 w-1.5 h-1.5 bg-blue-300 rounded-full opacity-70 animate-twinkle animation-delay-2000"></div>
+        <div className="absolute top-2/3 right-1/4 w-1 h-1 bg-pink-300 rounded-full opacity-60 animate-twinkle animation-delay-3000"></div>
+        <div className="absolute bottom-1/2 right-1/5 w-2 h-2 bg-indigo-200 rounded-full opacity-50 animate-twinkle animation-delay-4000"></div>
+
+        {/* Subtle grid pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div
+            className="h-full w-full bg-gradient-to-r from-transparent via-purple-500 to-transparent"
+            style={{
+              backgroundImage: `radial-gradient(circle at 1px 1px, rgba(139, 92, 246, 0.3) 1px, transparent 0)`,
+              backgroundSize: "50px 50px",
+            }}
+          ></div>
+        </div>
       </div>
 
       {/* Floating music notes */}
@@ -138,10 +154,69 @@ export default function PianoRecordingPage() {
             <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
               Piano Practice
             </h1>
-            <p className="text-gray-600 text-lg">
-              Record your performance or upload an audio file
-            </p>
+            <p className="text-gray-600 text-lg">Record your performance or upload an audio file</p>
           </div>
+
+          {/* Practicing Display */}
+          {musicType && (
+            <Card className="p-4 bg-white/90 backdrop-blur-sm border-0 shadow-xl">
+              <div className="flex items-center justify-center space-x-2">
+                <Music className="w-5 h-5 text-orange-500" />
+                <span className="text-lg font-semibold text-orange-600">Practicing: {musicType}</span>
+              </div>
+            </Card>
+          )}
+
+          {/* Music Type Chat */}
+          <div className="flex justify-center">
+            <Button
+              variant="outline"
+              className="bg-white/80 backdrop-blur-sm border-gray-200 hover:bg-white shadow-md"
+              onClick={() => {
+                console.log("Button clicked, current state:", showMusicTypeChat)
+                setShowMusicTypeChat(!showMusicTypeChat)
+              }}
+            >
+              <MessageCircle className="w-4 h-4 mr-2" />
+              {musicType ? "Music Type" : "Set Music Type"}
+            </Button>
+          </div>
+
+          {/* Music Type Input */}
+          {showMusicTypeChat && (
+            <Card className="p-4 bg-white/90 backdrop-blur-sm border-0 shadow-xl">
+              <div className="space-y-3">
+                <label className="text-sm font-medium text-gray-700">What type of music are you playing?</label>
+                <input
+                  type="text"
+                  value={musicType}
+                  onChange={(e) => setMusicType(e.target.value)}
+                  placeholder="e.g., Classical, Jazz, Pop, Blues..."
+                  className="w-full px-3 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white"
+                  autoFocus
+                />
+                <div className="flex space-x-2">
+                  <Button
+                    size="sm"
+                    className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600"
+                    onClick={() => setShowMusicTypeChat(false)}
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setMusicType("")
+                      setShowMusicTypeChat(false)
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          )}
 
           {/* Recording Status */}
           {isRecording && (
@@ -151,9 +226,7 @@ export default function PianoRecordingPage() {
                   <div className="w-4 h-4 bg-red-500 rounded-full animate-ping absolute"></div>
                   <div className="w-4 h-4 bg-red-500 rounded-full"></div>
                 </div>
-                <span className="text-red-700 font-semibold text-lg">
-                  Recording in progress...
-                </span>
+                <span className="text-red-700 font-semibold text-lg">Recording in progress...</span>
               </div>
             </Card>
           )}
@@ -167,10 +240,10 @@ export default function PianoRecordingPage() {
                     <Music className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900">
-                      {uploadedFile ? uploadedFile.name : "Your Recording"}
+                    <p className="font-medium text-gray-900">{uploadedFile ? uploadedFile.name : "Your Recording"}</p>
+                    <p className="text-sm text-gray-500">
+                      {musicType ? `${musicType} • Ready to analyze` : "Ready to analyze"}
                     </p>
-                    <p className="text-sm text-gray-500">Ready to analyze</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -180,11 +253,7 @@ export default function PianoRecordingPage() {
                     onClick={togglePlayback}
                     className="bg-white/50 hover:bg-white border-gray-200 shadow-sm"
                   >
-                    {isPlaying ? (
-                      <Pause className="w-4 h-4" />
-                    ) : (
-                      <Play className="w-4 h-4" />
-                    )}
+                    {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                   </Button>
                   <Button
                     variant="outline"
@@ -196,12 +265,7 @@ export default function PianoRecordingPage() {
                   </Button>
                 </div>
               </div>
-              <audio
-                ref={audioRef}
-                src={recordedAudio}
-                onEnded={handleAudioEnded}
-                className="hidden"
-              />
+              <audio ref={audioRef} src={recordedAudio} onEnded={handleAudioEnded} className="hidden" />
             </Card>
           )}
 
@@ -214,7 +278,7 @@ export default function PianoRecordingPage() {
                 size="lg"
                 className={cn(
                   "rounded-full w-20 h-20 hover:bg-gray-100 transition-all duration-300 transform hover:scale-105",
-                  isRecording && "bg-red-100 hover:bg-red-200 animate-pulse"
+                  isRecording && "bg-red-100 hover:bg-red-200 animate-pulse",
                 )}
                 onClick={isRecording ? stopRecording : startRecording}
               >
@@ -242,33 +306,40 @@ export default function PianoRecordingPage() {
 
           {/* Instructions */}
           <div className="text-center space-y-3">
-            <p className="text-gray-600 font-medium">
-              Tap the microphone to start recording
-            </p>
-            <p className="text-gray-500">
-              Or tap the upload icon to select an audio file
-            </p>
+            <p className="text-gray-600 font-medium">Tap the microphone to start recording</p>
+            <p className="text-gray-500">Or tap the upload icon to select an audio file</p>
           </div>
 
           {/* Action Buttons */}
           {(recordedAudio || uploadedFile) && (
             <div className="space-y-4 animate-in slide-in-from-bottom-4 duration-500">
               <Button
-                className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 shadow-lg transform transition-all duration-200 hover:scale-105"
+                className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 shadow-lg transform transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                disabled={isAnalyzing}
                 onClick={async () => {
-                  const result = await analyzeAudio(
-                    "piano",
-                    songTitle,
-                    base64AudioFile.split(",")[1]
-                  ).then((res) => {
-                    setAnalysisDone(true);
-                    return res;
-                  });
-                  setAnalysis(result);
+                  setIsAnalyzing(true)
+                  try {
+                    // Your analyze code here - replace this with your actual analysis logic
+                    await new Promise((resolve) => setTimeout(resolve, 3000)) // Simulated delay
+                    console.log("Analysis complete!")
+                  } catch (error) {
+                    console.error("Analysis failed:", error)
+                  } finally {
+                    setIsAnalyzing(false)
+                  }
                 }}
               >
-                <Sparkles className="w-5 h-5 mr-2" />
-                Analyze Performance
+                {isAnalyzing ? (
+                  <>
+                    <div className="w-5 h-5 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Analyzing...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-5 h-5 mr-2" />
+                    Analyze Performance
+                  </>
+                )}
               </Button>
               <Button
                 variant="outline"
@@ -280,39 +351,9 @@ export default function PianoRecordingPage() {
             </div>
           )}
 
-          {/* Song Title Input */}
-
           {/* Hidden File Input */}
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="audio/*"
-            onChange={handleFileUpload}
-            className="hidden"
-          />
+          <input ref={fileInputRef} type="file" accept="audio/*" onChange={handleFileUpload} className="hidden" />
         </div>
-
-        {showModal && (
-          <div className="fixed inset-0 z-50 bg-gray-100 bg-opacity-30 flex items-center justify-center">
-            <div className="bg-white rounded-2xl p-6 shadow-xl w-full max-w-sm text-center space-y-4">
-              <h2 className="text-xl font-bold text-gray-800">Analysis Complete</h2>
-              <p className="text-gray-600">Your performance has been analyzed.</p>
-              <Link
-                href={{
-                  pathname: "/analysis",
-                  query: { data: analysis },
-                }}
-                className="inline-block w-full"
-              >
-                <Button
-                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700"
-                >
-                  See Analysis
-                </Button>
-              </Link>
-            </div>
-          </div>
-        )}
       </div>
 
       <style jsx>{`
@@ -331,8 +372,7 @@ export default function PianoRecordingPage() {
           }
         }
         @keyframes float {
-          0%,
-          100% {
+          0%, 100% {
             transform: translateY(0px);
           }
           50% {
@@ -354,7 +394,48 @@ export default function PianoRecordingPage() {
         .animation-delay-1000 {
           animation-delay: 1s;
         }
+        @keyframes float-slow {
+          0%, 100% {
+            transform: translateY(0px) translateX(0px);
+          }
+          25% {
+            transform: translateY(-15px) translateX(10px);
+          }
+          50% {
+            transform: translateY(-10px) translateX(-5px);
+          }
+          75% {
+            transform: translateY(-20px) translateX(15px);
+          }
+        }
+
+        @keyframes twinkle {
+          0%, 100% {
+            opacity: 0.3;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 1;
+            transform: scale(1.5);
+          }
+        }
+
+        .animate-float-slow {
+          animation: float-slow 8s ease-in-out infinite;
+        }
+
+        .animate-twinkle {
+          animation: twinkle 3s ease-in-out infinite;
+        }
+
+        .animation-delay-3000 {
+          animation-delay: 3s;
+        }
+
+        .animation-delay-6000 {
+          animation-delay: 6s;
+        }
       `}</style>
     </div>
-  );
+  )
 }
